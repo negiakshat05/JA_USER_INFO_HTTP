@@ -3,6 +3,9 @@ package com.sita.task1.user.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,17 @@ import reactor.core.publisher.Mono;
 @Service
 public class UserInfoService {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserInfoService.class);
+
+	@Value("${baseURL}")
+	private String baseURL;
+
+	@Value("${baseURI}")
+	private String baseURI;
+
 	public void postToAnotherService(String userName, String workStation) {
+
+		logger.info("Entering into postToAnotherService method.");
 
 		Map<String, String> request = new HashMap<>();
 		request.put("user", userName);
@@ -24,20 +37,17 @@ public class UserInfoService {
 		request.put("status", "Success");
 		request.put("message", "User exists in database and has access to given workstation.");
 
-		String baseURL = "URL of second service you want to make the rest call to.";
-		String baseURI = "URI of the api of second service";
-
 		try {
 //			Making the rest call to another service in the next line
 			ClientResponse response = getWebClient(baseURL).method(HttpMethod.POST).uri(baseURI)
-					.body(Mono.just(request), String.class).exchange().block();
+					.body(Mono.just(request), Map.class).exchange().block();
 
 			if (null != response && response.statusCode().equals(HttpStatus.OK))
-				System.out.println("Successful post call to another service");
+				logger.info("Successful post call to another service");
 			else
-				System.out.println("Post call was not successful.");
+				logger.info("Post call was not successful.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception occered due to: {}", e.getMessage());
 		}
 //		
 	}

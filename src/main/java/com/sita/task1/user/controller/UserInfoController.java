@@ -3,6 +3,8 @@ package com.sita.task1.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import com.sita.task1.user.service.UserType;
 
 @RestController
 public class UserInfoController {
+
+	private static final Logger logger = LoggerFactory.getLogger(UserInfoController.class);
 
 	@Autowired
 	UserType userType;
@@ -29,6 +33,8 @@ public class UserInfoController {
 	@GetMapping("/userDetail")
 	public ResponseEntity<Map<String, String>> userDetail(@RequestParam("user") String userName) {
 
+		logger.info("Start of userDetail in controller.");
+		
 		Map<String, String> response = new HashMap<>();
 		Map<String, String> user = userType.getUsers();
 
@@ -36,15 +42,18 @@ public class UserInfoController {
 			String workStation = user.get(userName);
 
 //			commenting out the call to for making rest call to another service for now.
-//			userInfoService.postToAnotherService(userName, workStation);
+			userInfoService.postToAnotherService(userName, workStation);
 
 			response.put("user", userName);
 			response.put("workStation", workStation);
 			response.put("status", "Success");
 			response.put("message", "User exists in database and has access to given workstation.");
+			logger.info("End of userDetail in controller.");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			logger.info("User not valid");
+			response.put("message", "User not found.");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 
 	}
