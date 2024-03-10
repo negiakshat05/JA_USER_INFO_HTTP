@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.sita.task1.user.dao.UserRepo;
 import com.sita.task1.user.service.UserInfoService;
 import com.sita.task1.user.service.UserType;
 
@@ -26,6 +27,9 @@ public class UserInfoControllerTest {
 
 	@Mock
 	UserType userType;
+
+	@Mock
+	UserRepo userRepo;
 
 	@Mock
 	UserInfoService userInfoService;
@@ -41,6 +45,8 @@ public class UserInfoControllerTest {
 		Map<String, String> user = new HashMap<>();
 		user.put("validUser", "CCATEGI010");
 		Mockito.lenient().when(userType.getUsers()).thenReturn(user);
+		Mockito.lenient().when(userInfoService.postToAnotherService(Mockito.anyString(), Mockito.anyString()))
+				.thenReturn("Success");
 		ResponseEntity<Map<String, String>> responseEntity = userInfoController.userDetail("validUser");
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
