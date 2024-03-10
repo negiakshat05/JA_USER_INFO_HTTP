@@ -40,9 +40,7 @@ public class UserInfoController {
 
 		if (user.containsKey(userName)) {
 			String workStation = user.get(userName);
-
-//			commenting out the call to for making rest call to another service for now.
-			userInfoService.postToAnotherService(userName, workStation);
+			String status = userInfoService.postToAnotherService(userName, workStation);
 
 			response.put("user", userName);
 			response.put("workStation", workStation);
