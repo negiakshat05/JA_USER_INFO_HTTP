@@ -8,7 +8,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sita.task</groupId>
-	<artifactId>user</artifactId>
+	<artifactId>JA_USER_INFO_HTTP</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>user</name>
