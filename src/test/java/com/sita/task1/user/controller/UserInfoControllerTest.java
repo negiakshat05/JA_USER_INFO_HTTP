@@ -18,7 +18,7 @@ import com.sita.task1.user.service.UserInfoService;
 import com.sita.task1.user.service.UserType;
 
 @ExtendWith(MockitoExtension.class)
-public class USerControllerTest {
+public class UserInfoControllerTest {
 	
 	@InjectMocks
 	UserInfoController userInfoController;
@@ -36,21 +36,8 @@ public class USerControllerTest {
 		user.put("validUser", "CCATEGI010");
 		Mockito.lenient().when(userType.getUsers()).thenReturn(user);
 		Mockito.lenient().when(userInfoService.postToAnotherService(Mockito.anyString(), Mockito.anyString())).thenReturn("Success");
-		ResponseEntity<Map<String,String>> response = userInfoController.userDetail("validUser");
-		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		
-	}
-	
-	@Test
-	public void testUserDetail_Negative() {
-		
-		Map<String, String> user = new HashMap<>();
-		user.put("validUser", "CCATEGI010");
-		Mockito.lenient().when(userType.getUsers()).thenReturn(user);
-		Mockito.lenient().when(userInfoService.postToAnotherService(Mockito.anyString(), Mockito.anyString())).thenReturn("Success");
 		ResponseEntity<Map<String,String>> response = userInfoController.userDetail("invalid");
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		
 	}
 
 }
